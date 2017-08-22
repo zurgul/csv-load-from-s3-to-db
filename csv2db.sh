@@ -46,7 +46,7 @@ rm -rf $CSVPATH/*.csv
 # aws-cli shall be configured with the right access and secret keys
 aws s3 cp $S3URL $CSVPATH --recursive --exclude "*" --include "*.csv"
 
-if [ `ls -1U $CSVPATH/*.csv | wc -l` -eq 0 ]; then
+if [ `ls -1U $CSVPATH/*.csv 2>/dev/null | wc -l` -eq 0 ]; then
     echo Err: CSV files not found at [$S3URL]
     exit 1
 fi
