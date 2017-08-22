@@ -11,7 +11,7 @@ if [ "$#" -ne 14 ]; then
    -p        db pass
    -n        db name
 
-ex: csv2db.sh -t pg -s s3://test-storage/tables -h localhost -P 5432 -u postgres -p pass123 -n  my _db
+ex: csv2db.sh -t pg -s s3://test-storage/tables -h localhost -P 5432 -u postgres -p pass123 -n db-name
 "
   exit 1
 fi
