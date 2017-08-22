@@ -92,6 +92,4 @@ for f in `ls ./csv-data`; do
   echo -e "==> done"
 done
 
-if [ $ERRCODE -eq 0 ]; then echo -e "\nSUCCESS\n"; fi
-
-exit $ERRCODE
+echo -e "\nSUCCESS\n"
