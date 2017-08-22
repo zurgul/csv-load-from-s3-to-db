@@ -54,12 +54,16 @@ if [ `ls -1U ./csv-data/*.csv | wc -l` -eq 0 ]; then
 fi
 if [ $? -ne 0 ]; then exit $?; fi
 
+ERRCODE=0
+
 load2pg() {
   psql -h $HOST -d $DBNAME -U $USER -c "\copy ${1%.*} ($2) from '${CSVPATH}/$1' with delimiter as ',' csv header"
+  ERRCODE=$?
 }
 
 load2mysql() {
   mysqlimport -h $HOST -P $PORT --fields-terminated-by=, --ignore-lines=1 --columns=$2 --local -u $USER -p$PASS $DBNAME $CSVPATH/$1
+  ERRCODE=$?
 }
 
 if [ "$DBTYPE" == "$DBTYPE_PG" ]; then
@@ -70,6 +74,7 @@ fi
 for f in `ls ./csv-data`; do
   echo -e "\nImporting [${f%.*}]..."
   COLUMNS=$(head -n 1 $CSVPATH/$f)
+
   case "${DBTYPE}" in
     ${DBTYPE_PG})
       load2pg $f $COLUMNS
@@ -78,7 +83,15 @@ for f in `ls ./csv-data`; do
       load2mysql $f $COLUMNS
       ;;
   esac
+
+  if [ $ERRCODE -ne 0 ]; then
+    echo -e "\nErr: import error"
+    exit $ERRCODE
+  fi
+
   echo -e "==> done"
 done
 
-echo -e "\nSUCCESS\n"
+if [ $ERRCODE -eq 0 ]; then echo -e "\nSUCCESS\n"; fi
+
+exit $ERRCODE
