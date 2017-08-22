@@ -41,12 +41,12 @@ CSVPATH=./csv-data
 [ -d CSVPATH ] || mkdir -p $CSVPATH
 
 # make sure there is no old csv files
-rm -rf $CSVPATH/.csv
+rm -rf $CSVPATH/*.csv
 
 # aws-cli shall be configured with the right access and secret keys
 aws s3 cp $S3URL $CSVPATH --recursive --exclude "*" --include "*.csv"
 
-if [ `ls -1U ./csv-data/*.csv | wc -l` -eq 0 ]; then
+if [ `ls -1U $CSVPATH/*.csv | wc -l` -eq 0 ]; then
     echo Err: CSV files not found at [$S3URL]
     exit 1
 fi
@@ -69,7 +69,7 @@ if [ "$DBTYPE" == "$DBTYPE_PG" ]; then
 fi
 
 # table name is implied from .csv file name, first line with col names is ignored
-for f in `ls ./csv-data`; do
+for f in `ls $CSVPATH`; do
   echo -e "\nImporting [${f%.*}]..."
   COLUMNS=$(head -n 1 $CSVPATH/$f)
 
