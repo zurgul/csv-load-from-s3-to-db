@@ -62,7 +62,7 @@ load2pg() {
 }
 
 load2mysql() {
-  mysqlimport -h $HOST -P $PORT --fields-terminated-by=, --ignore-lines=1 --columns=$2 --local -u $USER -p$PASS $DBNAME $CSVPATH/$1
+  mysqlimport -h $HOST -P $PORT --fields-terminated-by=, --ignore-lines=1 --columns="$2" --local -u $USER -p$PASS $DBNAME $CSVPATH/$1
   ERRCODE=$?
 }
 
