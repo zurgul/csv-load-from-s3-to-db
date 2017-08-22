@@ -11,7 +11,7 @@ if [ "$#" -ne 14 ]; then
    -p        db pass
    -n        db name
 
-ex: csv2db.sh -t pg -s s3://dm-test-storage/tables -h localhost -P 5432 -u postgres -p proov123 -n proov_db
+ex: csv2db.sh -t pg -s s3://test-storage/tables -h localhost -P 5432 -u postgres -p pass123 -n  my _db
 "
   exit 1
 fi
@@ -44,8 +44,6 @@ CSVPATH=./csv-data
 rm -rf $CSVPATH/.csv
 
 # aws-cli shall be configured with the right access and secret keys
-# thus (bucket_name+path) will be enough to have precise location
-# aws s3 cp s3://dm-test-storage/tables /var/lib/mysql-files/ --recursive --exclude "*" --include "*.csv"
 aws s3 cp $S3URL $CSVPATH --recursive --exclude "*" --include "*.csv"
 
 if [ `ls -1U ./csv-data/*.csv | wc -l` -eq 0 ]; then
