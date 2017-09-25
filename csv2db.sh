@@ -55,12 +55,12 @@ fi
 ERRCODE=0
 
 load2pg() {
-  psql -h $HOST -d $DBNAME -U $USER -c "\copy ${1%.*} ($2) from '${CSVPATH}/$1' with delimiter as ',' csv header"
+  psql -h $HOST -d $DBNAME -U $USER -c "\copy ${1%.*} ($2) from '${CSVPATH}/$1' with delimiter as ',' escape as '\' csv header"
   ERRCODE=$?
 }
 
 load2mysql() {
-  mysqlimport -h $HOST -P $PORT --fields-terminated-by=, --ignore-lines=1 --columns="$2" --local -u $USER -p$PASS $DBNAME $CSVPATH/$1
+  mysqlimport -h $HOST -P $PORT --fields-terminated-by=, --fields-optionally-enclosed-by='"' --ignore-lines=1 --columns="$2" --local -u $USER -p$PASS $DBNAME $CSVPATH/$1
   ERRCODE=$?
 }
 
